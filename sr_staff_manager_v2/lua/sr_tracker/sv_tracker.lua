@@ -22,7 +22,7 @@ hook.Add("PlayerInitialSpawn", "SR_Tracker.PlayerInitialSpawn", function(ply)
 					query:Insert("time", 0)
 				query:Execute()
 			else
-				
+				print("hi")
 			end
 		end)
 	query:Execute()
