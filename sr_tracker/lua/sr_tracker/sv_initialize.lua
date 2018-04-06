@@ -10,7 +10,7 @@
 --
 
 --
-	-- util.AddNetworkString("SR_Tracker.SaveSetting")
+	util.AddNetworkString("SR_Tracker.SendTime")
 --
 
 --
@@ -30,8 +30,8 @@
 		query:Create("id", "INT AUTO_INCREMENT")
 		query:Create("steamid", "VARCHAR(255)")
 		query:Create("time", "FLOAT")
-		query:Create("firstjoin", "TEXT")
-		query:Create("lastjoin", "TEXT")
+		query:Create("firstjoin", "BIGINT")
+		query:Create("lastjoin", "BIGINT")
 		query:PrimaryKey("steamid")
 	query:Execute()
 --
