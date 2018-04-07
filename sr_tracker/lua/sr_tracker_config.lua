@@ -31,7 +31,7 @@
 
 		CloseButtonHover = Color(255, 60, 60),
 		
-		SearchBarBackground = Color(65, 185, 255),
+		SearchBarBackground = Color(65, 185, 255)
 	}
 --
 
@@ -44,6 +44,15 @@
 		Close = "Close",
 		
 		Reset = "Reset",
+	
+		SteamID = "SteamID",
+		PlayTime = "Play Time",
+		LastJoin = "Last Join",
+		FirstJoin = "First Join",
+		Online = "Online",
+	
+		Yes = "Yes",
+		No = "No"
 	}
 --
 
