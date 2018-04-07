@@ -2,6 +2,8 @@
 
 SR Tracker will track for how long your players been playing on your server with the ability to use mysql or sqlite.
 
+Edit sr_tracker/lua/sr_tracker/sv_mysql.lua to enable mysql
+
 # Images
 ![image](https://i.imgur.com/QicSwc8.jpg "image")
 
