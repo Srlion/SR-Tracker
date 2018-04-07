@@ -12,4 +12,6 @@ thelastpenguin™ for https://github.com/thelastpenguin/gLUA-Library/tree/master
 
 Alexander Grist-Hucker for https://github.com/alexgrist/GLua-MySQL-Wrapper
 
+Threebow for https://github.com/Threebow/tdlib
+
 [Flaticons](https://www.flaticon.com)
