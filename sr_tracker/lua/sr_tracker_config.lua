@@ -3,23 +3,22 @@
 	local config = sr.Config
 --
 
---
+-- Do you want to use workshop
 	config.UseWorkshop = true
 --
 
---
+-- Command to open times menu
 	config.Command = "!times"
 --
 
---
-	config.ResultsPerPage = 30
+-- Results to show per page
+	config.ResultsPerPage = 60
 --
 
---
+-- You can use group, steamid and steamid64
 	config.MenuPermissions = {
 		["founder"] = true,
-		["STEAM_0:0:150794857"] = true,
-		[""] = true,
+		["STEAM_0:0:150794857"] = true
 	}
 --
 
