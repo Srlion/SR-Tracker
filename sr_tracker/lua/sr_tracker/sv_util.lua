@@ -78,6 +78,7 @@ function sr.ResetTime(steamid)
 	if (ply) then
 		sr.SetPlayerVar(ply, "Time", 0)
 		sr.SetPlayerVar(ply, "JoinTime", CurTime())
+
 		net.Start("SR_Tracker.ResetTime")
 		net.Send(ply)
 	end
