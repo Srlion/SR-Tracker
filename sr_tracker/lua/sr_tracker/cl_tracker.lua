@@ -94,7 +94,7 @@ local function LoadLines(menu, results)
 		if (!v) then continue end
 
 		local steamid = v.steamid
-		local online = GetBySteamID(steamid) && "Yes" || "No"
+		local online = GetBySteamID(steamid) && languages.Yes || languages.No
 
 		local line = menu:AddLine(steamid, FormatTime(v.time), FormatDate(v.lastjoin), FormatDate(v.firstjoin), online)
 		line:SetAlpha(0)
@@ -311,11 +311,11 @@ local function OpenMenu(results, pages)
 	end
 
 	sr.AddHook("LoadedPanel", "LoadData", function()
-		menu.list:AddColumn("SteamID"):SetWidth(S(135))
-		menu.list:AddColumn("Play Time")
-		menu.list:AddColumn("Last Join")
-		menu.list:AddColumn("First Join")
-		menu.list:AddColumn("Online")
+		menu.list:AddColumn(languages.steamid):SetWidth(S(135))
+		menu.list:AddColumn(languages.PlayTime)
+		menu.list:AddColumn(languages.LastJoin)
+		menu.list:AddColumn(languages.FirstJoin)
+		menu.list:AddColumn(languages.Online)
 
 		for _, v in ipairs(menu.list.Columns) do
 			v.Header:TDLib()
