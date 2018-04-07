@@ -12,6 +12,13 @@ mysql.Port = 3306
 
 --==================================================================DONT TOUCH ANYTHING HERE==================================================================--
 
+--[[
+	mysql - 1.0.2
+	A simple MySQL wrapper for Garry's Mod.
+	Alexander Grist-Hucker
+	http://www.alexgrist.com
+--]]
+
 sr.MySQL = sr.MySQL or {};
 
 local sr_mysql = sr.MySQL
