@@ -21,10 +21,7 @@
 	if (config.UseWorkshop) then
 		resource.AddWorkshop("1295948558")
 	else
-		resource.AddFile("materials/sr_staff_manager/cancel.png")
-		resource.AddFile("materials/sr_staff_manager/recycle.png")
-		resource.AddFile("materials/sr_staff_manager/refresh.png")
-		resource.AddFile("materials/sr_staff_manager/accept.png")
+		resource.AddFile("materials/sr_tracker/cancel.png")
 		resource.AddFile("resource/fonts/Lato-Bold.ttf")
 	end
 --

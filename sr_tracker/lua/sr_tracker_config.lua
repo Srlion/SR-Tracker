@@ -54,6 +54,6 @@
 
 --
 	config.Materials = {
-		CloseButton = Material("materials/sr_staff_manager/cancel.png", "noclamp smooth"),
+		CloseButton = Material("materials/sr_tracker/cancel.png", "noclamp smooth"),
 	}
 --
