@@ -45,6 +45,8 @@
 		
 		Reset = "Reset",
 	
+		Search = "Search...",
+	
 		SteamID = "SteamID",
 		PlayTime = "Play Time",
 		LastJoin = "Last Join",
