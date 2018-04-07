@@ -11,6 +11,10 @@
 
 --
 	util.AddNetworkString("SR_Tracker.SendTime")
+	util.AddNetworkString("SR_Tracker.SendTimes")
+	util.AddNetworkString("SR_Tracker.ChangePage")
+	util.AddNetworkString("SR_Tracker.Search")
+	util.AddNetworkString("SR_Tracker.ResetTime")
 --
 
 --
@@ -27,7 +31,6 @@
 
 --
 	local query = mysql:Create("sr_tracker_times")
-		query:Create("id", "INT AUTO_INCREMENT")
 		query:Create("steamid", "VARCHAR(255)")
 		query:Create("time", "FLOAT")
 		query:Create("firstjoin", "BIGINT")

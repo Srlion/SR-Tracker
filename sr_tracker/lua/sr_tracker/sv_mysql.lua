@@ -8,7 +8,7 @@ mysql.Host = "127.0.0.1" -- Use 127.0.0.1 for localhost
 mysql.Username = ""
 mysql.Password = ""
 mysql.Database = ""
-mysql.Port = 3306 -- Don't touch if you don't know what is this
+mysql.Port = 3306
 
 --==================================================================DONT TOUCH ANYTHING HERE==================================================================--
 
