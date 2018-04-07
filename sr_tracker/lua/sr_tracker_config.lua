@@ -3,10 +3,6 @@
 	local config = sr.Config
 --
 
--- Do you want to use workshop
-	config.UseWorkshop = true
---
-
 -- Command to open times menu
 	config.Command = "!times"
 --
