@@ -11,6 +11,10 @@
 	config.ResultsPerPage = 60
 --
 
+--- Do you want to use workshop
+	config.UseWorkshop = true
+---
+
 -- You can use group, steamid and steamid64
 	config.MenuPermissions = {
 		["founder"] = true,
