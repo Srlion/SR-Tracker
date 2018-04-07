@@ -19,7 +19,7 @@
 
 --
 	if (config.UseWorkshop) then
-		resource.AddWorkshop("1295948558")
+		resource.AddWorkshop("1354595826")
 	else
 		resource.AddFile("materials/sr_tracker/cancel.png")
 		resource.AddFile("resource/fonts/Lato-Bold.ttf")
