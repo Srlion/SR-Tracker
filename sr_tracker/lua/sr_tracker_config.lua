@@ -47,6 +47,9 @@
 	
 		Search = "Search...",
 	
+		NextPage = "Next Page",
+		LastPage = "Last Page",
+	
 		SteamID = "SteamID",
 		PlayTime = "Play Time",
 		LastJoin = "Last Join",
