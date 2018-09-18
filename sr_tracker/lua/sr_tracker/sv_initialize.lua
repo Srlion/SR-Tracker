@@ -1,33 +1,15 @@
---
-	local sr = SR_Tracker
-	local config = sr.Config
---
+util.AddNetworkString("SR_Tracker.SendTimeOnJoin")
+util.AddNetworkString("SR_Tracker.SendTimes")
+util.AddNetworkString("SR_Tracker.ChangePage")
+util.AddNetworkString("SR_Tracker.Search")
+util.AddNetworkString("SR_Tracker.ResetTime")
 
---
-	local util = util
-	local resource = resource
-	local mysql = sr.MySQL
---
+resource.AddFile("resource/fonts/Lato-Bold.ttf")
 
---
-	util.AddNetworkString("SR_Tracker.SendTime")
-	util.AddNetworkString("SR_Tracker.SendTimes")
-	util.AddNetworkString("SR_Tracker.ChangePage")
-	util.AddNetworkString("SR_Tracker.Search")
-	util.AddNetworkString("SR_Tracker.ResetTime")
---
-
---
-	resource.AddFile("materials/sr_tracker/cancel.png")
-	resource.AddFile("resource/fonts/Lato-Bold.ttf")
---
-
---
-	local query = mysql:Create("sr_tracker_times")
-		query:Create("steamid", "VARCHAR(255)")
-		query:Create("time", "FLOAT")
-		query:Create("firstjoin", "BIGINT")
-		query:Create("lastjoin", "BIGINT")
-		query:PrimaryKey("steamid")
-	query:Execute()
---
+local query = SR_Tracker.MySQL:Create("sr_tracker_times")
+	query:Create("steamid", "VARCHAR(255)")
+	query:Create("time", "BIGINT")
+	query:Create("firstjoin", "BIGINT")
+	query:Create("lastjoin", "BIGINT")
+	query:PrimaryKey("steamid")
+query:Execute()

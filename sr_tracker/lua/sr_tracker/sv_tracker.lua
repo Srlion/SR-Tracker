@@ -1,32 +1,46 @@
---
-	local sr = SR_Tracker
-	local config = sr.Config
+-- some locals
+local SR = SR_Tracker
+local config = SR.Config
 --
 
+-- localizations
+local ipairs	= ipairs
+local istable	= istable
+local IsValid	= IsValid
+local GetHumans	= player.GetHumans
+
+local mysql 	= SR.MySQL
+local srEncode	= SR.Encode
+local setPlyVar = SR.SetPlyVar
+
+local hasMenuPermissions = SR.HasMenuPermissions
 --
-	local mysql = sr.MySQL
-	local CurTime = CurTime
---
+
+function SR.SavePlayerTime(ply, wait)
+	local query = mysql:Update("sr_tracker_times")
+		query:Update("time", ply:GetFullTime())
+		query:Where("steamid", ply:SteamID())
+	query:Execute(wait)
+end
 
 hook.Add("PlayerInitialSpawn", "SR_Tracker.PlayerInitialSpawn", function(ply)
 	local time = 0
 	local steamid = ply:SteamID()
-	local curtime = CurTime()
 	local ostime = os.time()
 
 	local query = mysql:Select("sr_tracker_times")
 		query:Where("steamid", steamid)
 		query:Callback(function(result)
-			local result = istable(result) && result[1]
+			result = istable(result) && result[1]
 			if (!result) then
-				local query = mysql:Insert("sr_tracker_times")
+				query = mysql:Insert("sr_tracker_times")
 					query:Insert("steamid", steamid)
 					query:Insert("time", time)
 					query:Insert("firstjoin", ostime)
 					query:Insert("lastjoin", ostime)
 				query:Execute()
 			else
-				local query = mysql:Update("sr_tracker_times")
+				query = mysql:Update("sr_tracker_times")
 					query:Update("lastjoin", ostime)
 					query:Where("steamid", steamid)
 				query:Execute()
@@ -34,37 +48,44 @@ hook.Add("PlayerInitialSpawn", "SR_Tracker.PlayerInitialSpawn", function(ply)
 				time = tonumber(result.time)
 			end
 
-			sr.CreatePlayerTable(ply)
-			sr.SetPlayerVar(ply, "JoinTime", curtime)
-			sr.SetPlayerVar(ply, "Time", time)
+			setPlyVar(ply, "JoinTime", ostime)
+			setPlyVar(ply, "Time", time)
 
-			net.Start("SR_Tracker.SendTime")
-				net.WriteFloat(time)
+			net.Start("SR_Tracker.SendTimeOnJoin")
+				net.WriteUInt(time, 32)
 			net.Send(ply)
-
-			timer.Create("SR_Tracker." .. steamid, 60, 0, function()
-				if (IsValid(ply)) then
-					local time = ply:GetFullTime()
-
-					local query = mysql:Update("sr_tracker_times")
-						query:Update("time", time)
-						query:Where("steamid", steamid)
-					query:Execute(true)
-				end
-			end)
 		end)
 	query:Execute()
 end)
 
+timer.Create("SR_Tracker.SaveTimes", 60, 0, function()
+	for _, ply in ipairs(GetHumans()) do
+		if (!IsValid(ply) || !ply:IsConnected()) then return end
+
+		SR.SavePlayerTime(ply, true)
+	end
+end)
+
 hook.Add("PlayerDisconnected", "SR_Tracker.PlayerDisconnected", function(ply)
-	timer.Remove("SR_Tracker." .. ply:SteamID())
+	SR.SavePlayerTime(ply)
 end)
 
 hook.Add("PlayerSay", "SR_Tracker.OpenTrackingMenu", function(ply, text)
-	if (string.lower(text) == string.lower(config.Command)) then
-		if (sr.HasMenuPermissions(ply)) then
-			sr.AddPlayerHook(ply, "SendingTimes", "SendingTimesToPlayer", function(results, pages)
-				local results = sr.Encode(results)
+	if (text:lower() != config.Command:lower()) then return end
+	if (!hasMenuPermissions(ply)) then return end
+
+	local limit = config.ResultsPerPage
+	local query = mysql:Select("sr_tracker_times")
+		query:Limit(limit)
+		query:OrderByDesc("lastjoin")
+		query:Callback(function(results)
+			if (!istable(results) || #results < 1) then return end
+
+			mysql:RawQuery("SELECT COUNT(*) AS `count` FROM `sr_tracker_times`", function(results2)
+				local pages = results2[1].count / limit
+				pages = pages != math.floor(pages) && pages + 1 || pages
+
+				results = srEncode(results)
 				local len = #results
 
 				net.Start("SR_Tracker.SendTimes")
@@ -73,20 +94,27 @@ hook.Add("PlayerSay", "SR_Tracker.OpenTrackingMenu", function(ply, text)
 					net.WriteData(results, len)
 				net.Send(ply)
 			end)
+		end)
+	query:Execute()
 
-			sr.GetTimes(ply)
-		end
-
-		return ""
-	end
+	return ""
 end)
 
 net.Receive("SR_Tracker.ChangePage", function(_, ply)
+	if (!hasMenuPermissions(ply)) then return end
+
 	local page = net.ReadUInt(32)
 
-	if (sr.HasMenuPermissions(ply)) then
-		sr.AddPlayerHook(ply, "SendNewPage", "SendNewPage", function(results)
-			local results = sr.Encode(results)
+	local limit = config.ResultsPerPage
+	local offset = limit * (page - 1)
+	local query = mysql:Select("sr_tracker_times")
+		query:Limit(limit)
+		query:Offset(offset)
+		query:OrderByDesc("lastjoin")
+		query:Callback(function(results)
+			if (!istable(results) || #results < 1) then return end
+
+			results = srEncode(results)
 			local len = #results
 
 			net.Start("SR_Tracker.ChangePage")
@@ -94,17 +122,18 @@ net.Receive("SR_Tracker.ChangePage", function(_, ply)
 				net.WriteData(results, len)
 			net.Send(ply)
 		end)
-
-		sr.ChangePage(ply, page)
-	end
+	query:Execute()
 end)
 
 net.Receive("SR_Tracker.Search", function(_, ply)
-	local steamid = net.ReadString()
+	if (!hasMenuPermissions(ply)) then return end
 
-	if (sr.HasMenuPermissions(ply)) then
-		sr.AddPlayerHook(ply, "Search", "Search", function(results)
-			local results = sr.Encode(results)
+	local query = mysql:Select("sr_tracker_times")
+		query:Where("steamid", net.ReadString())
+		query:Callback(function(results)
+			if (!istable(results) || #results < 1) then return end
+
+			results = srEncode(results)
 			local len = #results
 
 			net.Start("SR_Tracker.Search")
@@ -112,15 +141,29 @@ net.Receive("SR_Tracker.Search", function(_, ply)
 				net.WriteData(results, len)
 			net.Send(ply)
 		end)
-
-		sr.Search(ply, steamid)
-	end
+	query:Execute()
 end)
 
 net.Receive("SR_Tracker.ResetTime", function(_, ply)
+	if (!hasMenuPermissions(ply)) then return end
+
 	local steamid = net.ReadString()
 
-	if (sr.HasMenuPermissions(ply)) then
-		sr.ResetTime(steamid)
+	local ply2 = player.GetBySteamID(steamid)
+	if (ply2) then
+		local query = mysql:Update("sr_tracker_times")
+			query:Update("time", 0)
+			query:Where("steamid", steamid)
+		query:Execute()
+
+		setPlyVar(ply2, "Time", 0)
+		setPlyVar(ply2, "JoinTime", os.time())
+
+		net.Start("SR_Tracker.ResetTime")
+		net.Send(ply2)
+	else
+		local query = mysql:Delete("sr_tracker_times")
+			query:Where("steamid", steamid)
+		query:Execute()
 	end
 end)

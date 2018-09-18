@@ -1,5 +1,5 @@
 -- DONT TOUCH THIS
-	local sr = SR_Tracker
+	local SR = SR_Tracker
 	local mysql = {}
 --
 
@@ -19,9 +19,9 @@ mysql.Port = 3306
 	http://www.alexgrist.com
 --]]
 
-sr.MySQL = sr.MySQL or {};
+SR.MySQL = SR.MySQL or {};
 
-local sr_mysql = sr.MySQL
+local sr_mysql = SR.MySQL
 local QueueTable = {};
 local Module = mysql.Module;
 local Connected = false;

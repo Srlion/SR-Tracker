@@ -1,68 +1,52 @@
---
-	local sr = SR_Tracker
-	local config = sr.Config
---
+local SR = SR_Tracker
+local config = SR.Config
 
 -- Command to open times menu
-	config.Command = "!times"
---
+config.Command = "!times"
 
 -- Results to show per page
-	config.ResultsPerPage = 60
---
+config.ResultsPerPage = 60
+
+-- HUD position, choose between: Top, TopRight, TopLeft, Bottom, BottomRight, BottomLeft
+config.HUDPosition = "TopRight"
 
 -- You can use group, steamid and steamid64
-	config.MenuPermissions = {
-		["founder"] = true,
-		["STEAM_0:0:150794857"] = true
-	}
---
+config.MenuPermissions = {
+	["founder"] = true,
+	["superadmin"] = true,
+	["76561198261855442"] = true,
+	["STEAM_0:0:150794857"] = true
+}
 
---
-	config.Colors = {
-		HUDBackground = Color(65, 185, 255),
-		HUDTexts = Color(255, 255, 255),
+-- HUD Colors
+config.Colors = {
+	HUDBackground = Color(65, 185, 255),
+	HUDTexts = Color(255, 255, 255)
+}
 
-		Header = Color(65, 185, 255),
-		HeaderTextColor = Color(255, 255, 255),
+config.Languages = {
+	FullTime 	= "Play Time: %s",
+	SessionTime = "Session Time: %s",
 
-		Background = Color(126, 138, 153),
-		BackgroundList = Color(255, 255, 255),
+	Drag 	= "Drag",
+	Close	= "Close",
 
-		CloseButtonHover = Color(255, 60, 60),
-		
-		SearchBarBackground = Color(65, 185, 255)
-	}
---
+	Reset 			= "Reset",
+	CopySteamID 	= "Copy SteamID",
+	CopySteamID64 	= "Copy SteamID64",
 
---
-	config.Languages = {
-		FullTime = "Play Time: %s",
-		SessionTime = "Session Time: %s",
+	Search = "Search...",
 
-		Drag = "Drag",
-		Close = "Close",
-		
-		Reset = "Reset",
-	
-		Search = "Search...",
-	
-		NextPage = "Next Page",
-		LastPage = "Last Page",
-	
-		SteamID = "SteamID",
-		PlayTime = "Play Time",
-		LastJoin = "Last Join",
-		FirstJoin = "First Join",
-		Online = "Online",
-	
-		Yes = "Yes",
-		No = "No"
-	}
---
+	LastPage = "Last Page",
+	CurrPage = "Page: %d/%d",
+	NextPage = "Next Page",
 
---
-	config.Materials = {
-		CloseButton = Material("materials/sr_tracker/cancel.png", "noclamp smooth"),
-	}
---
+	SteamID 	= "SteamID",
+	PlayTime 	= "Play Time",
+	LastJoin 	= "Last Join",
+	FirstJoin	= "First Join",
+	Online 		= "Online",
+
+	Yes = "Yes",
+	No 	= "No"
+}

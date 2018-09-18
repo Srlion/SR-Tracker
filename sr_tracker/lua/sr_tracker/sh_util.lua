@@ -1,101 +1,46 @@
---
-	local sr = SR_Tracker
-	local config = sr.Config
-	local menupermissions = config.MenuPermissions
---
-
---
-	local CurTime = CurTime
-	local util = util
-	local hook_Add = hook.Add
-	local hook_Call = hook.Call
-	local hook_Remove = hook.Remove
+-- some locals
+local SR = SR_Tracker
+local config = SR.Config
+local menupermissions = config.MenuPermissions
 --
 
-function sr.CreatePlayerTable(ply)
-	ply.SR_Tracker = {}
+-- localizations
+local os_time = os.time
+
+local pon_encode = SR.pon.encode
+local pon_decode = SR.pon.decode
+
+local compress 		= util.Compress
+local decompress	= util.Decompress
+--
+
+function SR.SetPlyVar(ply, key, value, value2)
+	ply.SR_Tracker = ply.SR_Tracker || {}
+	ply.SR_Tracker[key] = value
 end
 
-function sr.SetPlayerVar(ply, key, value, value2)
-	if (value2) then
-		ply.SR_Tracker[key][value] = value2
-	else
-		ply.SR_Tracker[key] = value
-	end
+function SR.GetPlayerVar(ply, key, key2)
+	return ply.SR_Tracker[key]
 end
 
-function sr.GetPlayerVar(ply, key, key2)
-	local value = ply.SR_Tracker[key]
-
-	if (key2) then
-		value = value[key2]
-	end
-
-	return value
+function SR.Encode(data)
+	return compress(pon_encode(data))
 end
 
-function sr.Encode(data)
-	return util.Compress(sr.pon.encode(data))
+function SR.Decode(data)
+	return pon_decode(decompress(data))
 end
 
-function sr.Decode(data)
-	return sr.pon.decode(util.Decompress(data))
-end
-
-function sr.HasMenuPermissions(ply)
-	if (menupermissions[ply:GetUserGroup()] || menupermissions[ply:SteamID()] || menupermissions[ply:SteamID64()]) then
-		return true
-	end
-
-	return false
-end
-
-function sr.HookCall(key, ...)
-	local Hook = "SR_Tracker." .. key
-
-	hook_Call(Hook, nil, ...)
-end
-
-function sr.PlayerHookCall(ply, key, ...)
-	local Hook = "SR_Tracker." .. key .. ply:SteamID()
-
-	hook_Call(Hook, nil, ...)
-end
-
-function sr.RemoveHook(key, ide)
-	local Hook = "SR_Tracker." .. key
-
-	hook_Remove(Hook, ide)
-end
-
-function sr.RemovePlayerHook(ply, key, ide)
-	local Hook = "SR_Tracker." .. key .. ply:SteamID()
-
-	hook_Remove(Hook, ide)
-end
-
-function sr.AddHook(key, ide, callback)
-	local Hook = "SR_Tracker." .. key
-
-	hook_Add(Hook, ide, function(...)
-		callback(...)
-	end)
-end
-
-function sr.AddPlayerHook(ply, key, ide, callback)
-	local Hook = "SR_Tracker." .. key .. ply:SteamID()
-
-	hook_Add(Hook, ide, function(...)
-		callback(...)
-	end)
+function SR.HasMenuPermissions(ply)
+	return menupermissions[ply:GetUserGroup()] || menupermissions[ply:SteamID()] || menupermissions[ply:SteamID64()]
 end
 
 local PLAYER = FindMetaTable("Player")
 
 function PLAYER:GetFullTime()
-	return sr.GetPlayerVar(self, "Time") + (CurTime() - sr.GetPlayerVar(self, "JoinTime"))
+	return SR.GetPlayerVar(self, "Time") + (os_time() - SR.GetPlayerVar(self, "JoinTime"))
 end
 
 function PLAYER:GetSessionTime()
-	return CurTime() - sr.GetPlayerVar(self, "JoinTime")
+	return os_time() - SR.GetPlayerVar(self, "JoinTime")
 end
