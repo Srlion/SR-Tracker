@@ -296,10 +296,11 @@ end
 
 net.Receive("SR_Tracker.SendTimeOnJoin", function()
 	local time = net.ReadUInt(32)
+	local ostime = net.ReadUInt(32)
 
 	hook.Add("HUDPaint", "SR_Tracker.SetCurrentTime", function()
 		SR.SetPlyVar(LocalPlayer(), "Time", time)
-		SR.SetPlyVar(LocalPlayer(), "JoinTime", os_time())
+		SR.SetPlyVar(LocalPlayer(), "JoinTime", ostime)
 
 		hook.Remove("HUDPaint", "SR_Tracker.SetCurrentTime")
 	end)

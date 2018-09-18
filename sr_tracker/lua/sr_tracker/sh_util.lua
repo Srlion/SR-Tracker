@@ -38,7 +38,7 @@ end
 local PLAYER = FindMetaTable("Player")
 
 function PLAYER:GetFullTime()
-	return SR.GetPlayerVar(self, "Time") + (os_time() - SR.GetPlayerVar(self, "JoinTime"))
+	return SR.GetPlayerVar(self, "Time") + self:GetSessionTime()
 end
 
 function PLAYER:GetSessionTime()

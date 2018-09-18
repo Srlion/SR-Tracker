@@ -16,6 +16,12 @@ local setPlyVar = SR.SetPlyVar
 local hasMenuPermissions = SR.HasMenuPermissions
 --
 
+util.AddNetworkString("SR_Tracker.SendTimeOnJoin")
+util.AddNetworkString("SR_Tracker.SendTimes")
+util.AddNetworkString("SR_Tracker.ChangePage")
+util.AddNetworkString("SR_Tracker.Search")
+util.AddNetworkString("SR_Tracker.ResetTime")
+
 function SR.SavePlayerTime(ply, wait)
 	local query = mysql:Update("sr_tracker_times")
 		query:Update("time", ply:GetFullTime())
@@ -48,11 +54,12 @@ hook.Add("PlayerInitialSpawn", "SR_Tracker.PlayerInitialSpawn", function(ply)
 				time = tonumber(result.time)
 			end
 
-			setPlyVar(ply, "JoinTime", ostime)
 			setPlyVar(ply, "Time", time)
+			setPlyVar(ply, "JoinTime", ostime)
 
 			net.Start("SR_Tracker.SendTimeOnJoin")
 				net.WriteUInt(time, 32)
+				net.WriteUInt(ostime, 32)
 			net.Send(ply)
 		end)
 	query:Execute()
