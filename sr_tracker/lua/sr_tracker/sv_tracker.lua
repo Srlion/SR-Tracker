@@ -67,7 +67,7 @@ end)
 
 timer.Create("SR_Tracker.SaveTimes", 60, 0, function()
 	for _, ply in ipairs(GetHumans()) do
-		if (!IsValid(ply) || !ply:IsConnected()) then return end
+		if (!IsValid(ply) || !ply:IsConnected()) then continue end
 
 		SR.SavePlayerTime(ply, true)
 	end
