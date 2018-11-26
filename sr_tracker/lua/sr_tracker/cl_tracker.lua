@@ -24,7 +24,6 @@ local SetFont 		= surface.SetFont
 local GetTextSize	= surface.GetTextSize
 
 local GetBySteamID = player.GetBySteamID
-local table_insert = table.insert
 local table_concat = table.concat
 --
 
