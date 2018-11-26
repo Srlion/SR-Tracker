@@ -43,36 +43,36 @@ local function div(number, number2) -- Thanks to this guide https://stackoverflo
 end
 
 local function formatTime(number)
-	number = tonumber(number)
-
 	local tmptable = {}
 
-	if (number > 0) then
-		local weeks, number = div(number, 604800)
+	if (tonumber(number) > 0) then
+        local weeks, days, hours, minutes
+
+		weeks, number = div(number, 604800)
 		if (weeks > 0) then
-			table_insert(tmptable, weeks .. "w")
+			tmptable[#tmptable+1] = weeks .. "w"
 		end
 
-		local days, number = div(number, 86400)
+		days, number = div(number, 86400)
 		if (days > 0) then
-			table_insert(tmptable, days .. "d")
+			tmptable[#tmptable+1] = days .. "d"
 		end
 
-		local hours, number = div(number, 3600)
+		hours, number = div(number, 3600)
 		if (hours > 0) then
-			table_insert(tmptable, hours .. "h")
+			tmptable[#tmptable+1] = hours .. "h"
 		end
 
-		local minutes, number = div(number, 60)
+		minutes, number = div(number, 60)
 		if (minutes > 0) then
-			table_insert(tmptable, minutes .. "m")
+			tmptable[#tmptable+1] = minutes .. "m"
 		end
 
 		if (number > 0) then
-			table_insert(tmptable, number .. "s")
+			tmptable[#tmptable+1] = number .. "s"
 		end
 	else
-		table_insert(tmptable, number .. "s")
+		tmptable[#tmptable+1] = number .. "s"
 	end
 
 	return table_concat(tmptable, " ")
