@@ -298,6 +298,8 @@ net.Receive("SR_Tracker.SendTimeOnJoin", function()
 	local ostime = net.ReadUInt(32)
 
 	hook.Add("HUDPaint", "SR_Tracker.SetCurrentTime", function()
+		if !IsValid(LocalPlayer()) then return end
+
 		SR.SetPlyVar(LocalPlayer(), "Time", time)
 		SR.SetPlyVar(LocalPlayer(), "JoinTime", ostime)
 
